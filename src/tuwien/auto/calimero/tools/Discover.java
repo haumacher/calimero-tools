@@ -133,7 +133,7 @@ public class Discover implements Runnable
 	{
 		// use a log writer to System.out
 		final LogWriter w = LogStreamWriter.newUnformatted(LogLevel.INFO, System.out, true, false);
-		out.addWriter(w);
+		LogManager.getManager().addWriter(null, w);
 		try {
 			final Discover d = new Discover(args);
 			final ShutdownHandler sh = new ShutdownHandler().register();

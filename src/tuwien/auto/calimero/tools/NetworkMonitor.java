@@ -152,7 +152,7 @@ public class NetworkMonitor implements Runnable
 	public static void main(final String[] args)
 	{
 		final LogWriter w = new LogStreamWriter(LogLevel.WARN, System.out, true, false);
-		out.addWriter(w);
+		LogManager.getManager().addWriter(null, w);
 		try {
 			// if listener is null, we create our default one
 			final NetworkMonitor m = new NetworkMonitor(args);

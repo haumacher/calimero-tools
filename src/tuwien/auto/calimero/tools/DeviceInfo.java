@@ -143,7 +143,7 @@ public class DeviceInfo implements Runnable
 	public static void main(final String[] args)
 	{
 		final LogWriter w = LogStreamWriter.newUnformatted(LogLevel.WARN, System.out, true, false);
-		out.addWriter(w);
+		LogManager.getManager().addWriter(null, w);
 		try {
 			final DeviceInfo d = new DeviceInfo(args);
 			w.setLogLevel(d.options.containsKey("verbose") ? LogLevel.TRACE : LogLevel.WARN);

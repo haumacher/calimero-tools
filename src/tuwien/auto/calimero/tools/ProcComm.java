@@ -180,7 +180,7 @@ public class ProcComm implements Runnable
 		try {
 			final LogWriter w = LogStreamWriter.newUnformatted(LogLevel.INFO, System.out, true,
 					false);
-			out.addWriter(w);
+			LogManager.getManager().addWriter(null, w);
 			final ProcComm pc = new ProcComm(args, null);
 			// adjust log level, if specified
 			if (!pc.options.containsKey("verbose"))
