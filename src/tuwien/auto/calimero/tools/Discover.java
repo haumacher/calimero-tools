@@ -195,6 +195,7 @@ public class Discover implements Runnable
 	protected void onEndpointReceived(final SearchResponse response)
 	{
 		final StringBuffer buf = new StringBuffer();
+		buf.append(sep).append("local address ").append(response.getLocalAddress());
 		buf.append(sep).append("control endpoint ");
 		buf.append(response.getControlEndpoint().toString()).append(sep);
 		buf.append(response.getDevice().toString());
