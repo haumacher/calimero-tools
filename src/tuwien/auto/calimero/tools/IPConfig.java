@@ -89,7 +89,7 @@ public class IPConfig implements Runnable
 	private PropertyClient pc;
 	private int objIndex = -1;
 
-	private final Map options = new HashMap();
+	private final Map<String, Object> options = new HashMap<String, Object>();
 
 	/**
 	 * Creates a new IPConfig instance using the supplied options.
@@ -207,10 +207,10 @@ public class IPConfig implements Runnable
 			// LogManager.getManager().addWriter("PC " + adapter.getName(), w);
 
 			// get object type with KNXnet/IP parameters
-			final List l = pc.scanProperties(false);
+			final List<Description> l = pc.scanProperties(false);
 
-			for (final Iterator i = l.iterator(); i.hasNext();) {
-				final Description d = (Description) i.next();
+			for (final Iterator<Description> i = l.iterator(); i.hasNext();) {
+				final Description d = i.next();
 				if (d.getObjectType() == IPObjType) {
 					objIndex = d.getObjectIndex();
 					break;
@@ -252,14 +252,14 @@ public class IPConfig implements Runnable
 	 *        being the property identifier (PID), [1] being a short descriptive name of the
 	 *        configuration property, [2] being the value
 	 */
-	protected void onConfigurationReceived(final List config)
+	protected void onConfigurationReceived(final List<String[]> config)
 	{
 		final StringBuffer sb = new StringBuffer();
-		sb.append("KNXnet/IP server ").append(((String[]) config.get(0))[2]).append(" ")
-				.append(((String[]) config.get(1))[2]).append(sep);
+		sb.append("KNXnet/IP server ").append(config.get(0)[2]).append(" ")
+				.append(config.get(1)[2]).append(sep);
 		final String padding = "                                   ";
 		for (int i = 2; i < config.size(); ++i) {
-			final String[] s = (String[]) config.get(i);
+			final String[] s = config.get(i);
 			sb.append(s[1]).append(padding.substring(s[1].length()) + s[2]).append(sep);
 		}
 		out.log(LogLevel.ALWAYS, sb.toString(), null);
@@ -310,7 +310,7 @@ public class IPConfig implements Runnable
 
 	private void readConfig() throws KNXException
 	{
-		final List config = new ArrayList();
+		final List<String[]> config = new ArrayList<String[]>();
 		int pid = PropertyAccess.PID.KNX_INDIVIDUAL_ADDRESS;
 		byte[] data = query(pid);
 		if (data != null)
@@ -345,12 +345,12 @@ public class IPConfig implements Runnable
 		onConfigurationReceived(config);
 	}
 
-	private void addIP(final List config, final int pid, final String name)
+	private void addIP(final List<String[]> config, final int pid, final String name)
 	{
 		add(config, pid, name, queryIP(pid));
 	}
 
-	private void add(final List config, final int pid, final String name, final String value)
+	private void add(final List<String[]> config, final int pid, final String name, final String value)
 	{
 		config.add(new String[] { Integer.toString(pid), name, value });
 	}
@@ -507,7 +507,7 @@ public class IPConfig implements Runnable
 	private void parseOptions(final String[] args)
 	{
 		// remove empty arguments
-		final List l = new ArrayList(Arrays.asList(args));
+		final List<String> l = new ArrayList<String>(Arrays.asList(args));
 		l.removeAll(Arrays.asList(new String[] { "" }));
 		if (l.size() == 0)
 			return;
@@ -516,8 +516,8 @@ public class IPConfig implements Runnable
 		options.put("port", new Integer(KNXnetIPConnection.DEFAULT_PORT));
 		options.put("medium", TPSettings.TP1);
 
-		for (final Iterator i = l.iterator(); i.hasNext();) {
-			final String arg = (String) i.next();
+		for (final Iterator<String> i = l.iterator(); i.hasNext();) {
+			final String arg = i.next();
 			if (isOption(arg, "-help", "-h")) {
 				options.put("help", null);
 				return;
@@ -530,27 +530,27 @@ public class IPConfig implements Runnable
 				options.put("localDM", null);
 			else if (isOption(arg, "-remote", "-r"))
 				try {
-					options.put("remote", new IndividualAddress((String) i.next()));
+					options.put("remote", new IndividualAddress(i.next()));
 				}
 				catch (final KNXFormatException e) {
 					throw new KNXIllegalArgumentException(e.getMessage(), e);
 				}
 			else if (isOption(arg, "-localhost", null))
-				parseIP((String) i.next(), "localhost", options);
+				parseIP(i.next(), "localhost", options);
 			else if (isOption(arg, "-localport", null))
-				options.put("localport", Integer.decode((String) i.next()));
+				options.put("localport", Integer.decode(i.next()));
 			else if (isOption(arg, "-port", "-p"))
-				options.put("port", Integer.decode((String) i.next()));
+				options.put("port", Integer.decode(i.next()));
 			else if (isOption(arg, "-nat", "-n"))
 				options.put("nat", null);
 			else if (isOption(arg, "-serial", "-s"))
 				options.put("serial", null);
 			else if (isOption(arg, "-medium", "-m"))
-				options.put("medium", getMedium((String) i.next()));
+				options.put("medium", getMedium(i.next()));
 			else if (isOption(arg, "-connect", "-c"))
 				options.put("connect", null);
 			else if (isOption(arg, "-authorize", "-a"))
-				options.put("authorize", getAuthorizeKey((String) i.next()));
+				options.put("authorize", getAuthorizeKey(i.next()));
 			else if (isOption(arg, "-routing", null))
 				options.put("routing", null);
 			// IP configuration options
@@ -563,13 +563,13 @@ public class IPConfig implements Runnable
 			else if (arg.equalsIgnoreCase("autoip"))
 				options.put("autoip", null);
 			else if (arg.equalsIgnoreCase("ip"))
-				parseIP((String) i.next(), "ip", options);
+				parseIP(i.next(), "ip", options);
 			else if (arg.equalsIgnoreCase("subnet"))
-				parseIP((String) i.next(), "subnet", options);
+				parseIP(i.next(), "subnet", options);
 			else if (arg.equalsIgnoreCase("gateway"))
-				parseIP((String) i.next(), "gateway", options);
+				parseIP(i.next(), "gateway", options);
 			else if (arg.equalsIgnoreCase("multicast"))
-				parseIP((String) i.next(), "multicast", options);
+				parseIP(i.next(), "multicast", options);
 			// add option as port identifier or host name
 			else if (options.containsKey("serial"))
 				options.put("serial", arg);
@@ -662,7 +662,7 @@ public class IPConfig implements Runnable
 			(byte) value };
 	}
 
-	private static void parseIP(final String address, final String key, final Map options)
+	private static void parseIP(final String address, final String key, final Map<String, Object> options)
 	{
 		try {
 			options.put(key, InetAddress.getByName(address));

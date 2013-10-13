@@ -87,11 +87,11 @@ public class Property implements Runnable, PropertyAdapterListener
 	static LogService out = LogManager.getManager().getLogService("tools");
 
 	/** tool options map */
-	protected final Map options = new HashMap();
+	protected final Map<String, Object> options = new HashMap<String, Object>();
 
 	private PropertyClient pc;
 	private KNXNetworkLink lnk;
-	private Map definitions;
+	private Map<PropertyKey, tuwien.auto.calimero.mgmt.PropertyClient.Property> definitions;
 
 	private final Thread interruptOnClose;
 
@@ -215,7 +215,7 @@ public class Property implements Runnable, PropertyAdapterListener
 		}
 
 		// load property definitions from resource, if any
-		Collection defs = null;
+		Collection<tuwien.auto.calimero.mgmt.PropertyClient.Property> defs = null;
 		if (options.containsKey("definitions")) {
 			try {
 				defs = PropertyClient.loadDefinitions((String) options.get("definitions"), null);
@@ -426,7 +426,7 @@ public class Property implements Runnable, PropertyAdapterListener
 	{
 		if (definitions == null)
 			return null;
-		return (tuwien.auto.calimero.mgmt.PropertyClient.Property) definitions
+		return definitions
 				.get(new PropertyClient.PropertyKey(objType, pid));
 	}
 
@@ -485,7 +485,7 @@ public class Property implements Runnable, PropertyAdapterListener
 			else if (isOption(arg, "get", null) || isOption(arg, "set", null)
 					|| isOption(arg, "desc", null) || isOption(arg, "scan", null)
 					|| isOption(arg, "?", null)) {
-				final String[] command = (String[]) Arrays.asList(args).subList(i, args.length)
+				final String[] command = Arrays.asList(args).subList(i, args.length)
 						.toArray(new String[0]);
 				options.put("command", command);
 				break;
@@ -583,7 +583,7 @@ public class Property implements Runnable, PropertyAdapterListener
 	private void scanProperties(final String[] args) throws KNXException
 	{
 		final int cnt = args.length;
-		List l = Collections.EMPTY_LIST;
+		List<Description> l = Collections.emptyList();
 		if (cnt == 1)
 			l = pc.scanProperties(false);
 		else if (cnt == 2) {
@@ -599,8 +599,8 @@ public class Property implements Runnable, PropertyAdapterListener
 		else
 			out.log(LogLevel.INFO, "sorry, wrong number of arguments", null);
 
-		for (final Iterator i = l.iterator(); i.hasNext();) {
-			final Description d = (Description) i.next();
+		for (final Iterator<Description> i = l.iterator(); i.hasNext();) {
+			final Description d = i.next();
 			printDescription(d);
 		}
 	}
@@ -699,7 +699,7 @@ public class Property implements Runnable, PropertyAdapterListener
 	}
 
 	private static void parseHost(final String host, final boolean local,
-		final Map options)
+		final Map<String, Object> options)
 	{
 		try {
 			options.put(local ? "localhost" : "host", InetAddress.getByName(host));

@@ -85,7 +85,7 @@ public class NetworkMonitor implements Runnable
 
 	private static LogService out = LogManager.getManager().getLogService("tools");
 
-	private final Map options = new HashMap();
+	private final Map<String, Object> options = new HashMap<String, Object>();
 	private KNXNetworkMonitor m;
 
 	private final LinkListener l = new LinkListener()
@@ -453,7 +453,7 @@ public class NetworkMonitor implements Runnable
 			throw new KNXIllegalArgumentException("unknown medium");
 	}
 
-	private static void parseHost(final String host, final boolean local, final Map options)
+	private static void parseHost(final String host, final boolean local, final Map<String, Object> options)
 	{
 		try {
 			options.put(local ? "localhost" : "host", InetAddress.getByName(host));

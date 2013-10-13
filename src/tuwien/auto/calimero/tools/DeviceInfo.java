@@ -87,7 +87,7 @@ public class DeviceInfo implements Runnable
 	private ManagementClient mc;
 	private Destination d;
 
-	private final Map options = new HashMap();
+	private final Map<String, Object> options = new HashMap<String, Object>();
 
 	/**
 	 * Creates a new DeviceInfo instance using the supplied options.
@@ -447,7 +447,7 @@ public class DeviceInfo implements Runnable
 		}
 	}
 
-	private static void parseHost(final String host, final boolean local, final Map options)
+	private static void parseHost(final String host, final boolean local, final Map<String, Object> options)
 	{
 		try {
 			options.put(local ? "localhost" : "host", InetAddress.getByName(host));
