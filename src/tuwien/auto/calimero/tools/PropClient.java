@@ -64,6 +64,7 @@ public class PropClient implements Runnable
 			super(args);
 		}
 
+		@Override
 		protected void runCommand(final String[] cmd)
 		{
 			// ignore any command supplied on command line
@@ -99,6 +100,7 @@ public class PropClient implements Runnable
 			}
 		}
 
+		@Override
 		void showVersion()
 		{
 			Property.out.log(LogLevel.ALWAYS,
@@ -176,6 +178,7 @@ public class PropClient implements Runnable
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
+	@Override
 	public void run()
 	{
 		property.run();

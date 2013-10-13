@@ -148,6 +148,7 @@ public class Discover implements Runnable
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
+	@Override
 	public void run()
 	{
 		Exception thrown = null;
@@ -437,6 +438,7 @@ public class Discover implements Runnable
 			Runtime.getRuntime().removeShutdownHook(this);
 		}
 
+		@Override
 		public void run()
 		{
 			t.interrupt();

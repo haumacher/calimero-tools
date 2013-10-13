@@ -162,6 +162,7 @@ public class DeviceInfo implements Runnable
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
+	@Override
 	public void run()
 	{
 		// ??? as with the other tools, maybe put this into the try block to also call onCompletion
@@ -574,6 +575,7 @@ public class DeviceInfo implements Runnable
 			Runtime.getRuntime().removeShutdownHook(this);
 		}
 
+		@Override
 		public void run()
 		{
 			t.interrupt();

@@ -198,6 +198,7 @@ public class ProcComm implements Runnable
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
+	@Override
 	public void run()
 	{
 		Exception thrown = null;
@@ -565,6 +566,7 @@ public class ProcComm implements Runnable
 			Runtime.getRuntime().removeShutdownHook(this);
 		}
 
+		@Override
 		public void run()
 		{
 			quit();

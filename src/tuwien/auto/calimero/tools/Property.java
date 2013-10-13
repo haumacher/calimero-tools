@@ -196,6 +196,7 @@ public class Property implements Runnable, PropertyAdapterListener
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
+	@Override
 	public void run()
 	{
 		// ??? as with the other tools, maybe put this into the try block to also call onCompletion
@@ -259,6 +260,7 @@ public class Property implements Runnable, PropertyAdapterListener
 		}
 	}
 
+	@Override
 	public void adapterClosed(final CloseEvent e)
 	{
 		out.log(LogLevel.INFO, "connection closed (" + e.getReason() + ")", null);

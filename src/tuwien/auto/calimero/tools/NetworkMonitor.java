@@ -90,11 +90,13 @@ public class NetworkMonitor implements Runnable
 
 	private final LinkListener l = new LinkListener()
 	{
+		@Override
 		public void indication(final FrameEvent e)
 		{
 			NetworkMonitor.this.onIndication(e);
 		}
 
+		@Override
 		public void linkClosed(final CloseEvent e)
 		{
 			out.info("network monitor closed (" + e.getReason() + ")");
@@ -172,6 +174,7 @@ public class NetworkMonitor implements Runnable
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
+	@Override
 	public void run()
 	{
 		Exception thrown = null;
@@ -488,6 +491,7 @@ public class NetworkMonitor implements Runnable
 			Runtime.getRuntime().removeShutdownHook(this);
 		}
 
+		@Override
 		public void run()
 		{
 			quit();
